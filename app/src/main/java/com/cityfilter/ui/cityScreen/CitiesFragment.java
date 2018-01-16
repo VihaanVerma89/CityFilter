@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.cityfilter.R;
 import com.cityfilter.network.models.City;
@@ -20,7 +21,11 @@ import java.util.List;
  * Created by vihaanverma on 16/01/18.
  */
 
-public class CitiesFragment extends Fragment implements CitiesContract.View {
+public class CitiesFragment extends Fragment
+        implements CitiesContract.View,
+        CitiesAdapter.CitiesListener
+
+{
 
     public static CitiesFragment newInstance() {
         Bundle args = new Bundle();
@@ -42,31 +47,34 @@ public class CitiesFragment extends Fragment implements CitiesContract.View {
         initViews();
     }
 
-    private void initViews(){
+    private void initViews() {
         initProgressBar();
         initRecyclerView();
     }
 
     private ProgressBar mProgressBar;
-    private void initProgressBar(){
+
+    private void initProgressBar() {
         mProgressBar = getView().findViewById(R.id.progressBar);
     }
 
     @Override
-    public void hideProgressView(){
+    public void hideProgressView() {
         mProgressBar.setVisibility(View.GONE);
     }
 
 
     private RecyclerView mRecyclerView;
     private CitiesAdapter mCitiesAdapter;
-    private void initRecyclerView(){
+
+    private void initRecyclerView() {
         mRecyclerView = getView().findViewById(R.id.citiesRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
     private CitiesContract.Presenter mPresenter;
+
     @Override
     public void setPresenter(CitiesContract.Presenter presenter) {
         mPresenter = presenter;
@@ -84,18 +92,28 @@ public class CitiesFragment extends Fragment implements CitiesContract.View {
         mPresenter.unsubscribe();
     }
 
+    private List<City> mCities;
+
     @Override
     public void showCities(CityData cityData) {
-        if(isAdded())
-        {
-            List<City> cities = cityData.getCities();
-            mCitiesAdapter = new CitiesAdapter(getActivity(), cities);
+        if (isAdded()) {
+            mCities = cityData.getCities();
+            mCitiesAdapter = new CitiesAdapter(getActivity(), this, mCities);
             mRecyclerView.setAdapter(mCitiesAdapter);
         }
     }
 
     @Override
     public void showCitiesError(Throwable error) {
+        if (isAdded()) {
 
+        }
+    }
+
+    @Override
+    public void onCityClicked(int position) {
+        String cityName = mCities.get(position).getName();
+        String toast = new StringBuilder("Selection is - ").append(cityName).toString();
+        Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
     }
 }

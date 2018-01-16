@@ -18,18 +18,24 @@ import java.util.List;
 
 public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CityViewHolder> {
 
+    interface CitiesListener {
+        void onCityClicked(int position);
+    }
+
     private Context mContext;
     private List<City> mCities;
-    public CitiesAdapter(Context context, List<City> cities)
-    {
-       mContext = context;
-       mCities = cities;
+    private CitiesListener mListener;
+
+    public CitiesAdapter(Context context, CitiesListener listener, List<City> cities) {
+        mContext = context;
+        mCities = cities;
+        mListener = listener;
     }
 
     @Override
     public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.mContext).inflate(R.layout.item_city, parent, false);
-        CityViewHolder cityViewHolder =  new CityViewHolder(view);
+        CityViewHolder cityViewHolder = new CityViewHolder(view);
         return cityViewHolder;
     }
 
@@ -37,8 +43,13 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CityViewHo
     public void onBindViewHolder(CityViewHolder holder, int position) {
         String city = mCities.get(position).getName();
         holder.cityTV.setText(city);
+        holder.cityTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCityClicked(position);
+            }
+        });
     }
-
 
 
     @Override
@@ -46,8 +57,10 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CityViewHo
         return mCities.size();
     }
 
-    class CityViewHolder extends RecyclerView.ViewHolder{
+
+    class CityViewHolder extends RecyclerView.ViewHolder {
         TextView cityTV;
+
         public CityViewHolder(View itemView) {
             super(itemView);
             cityTV = itemView.findViewById(R.id.cityTV);
