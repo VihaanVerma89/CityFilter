@@ -1,0 +1,43 @@
+package com.cityfilter.data;
+
+import com.cityfilter.network.ApiClient;
+import com.cityfilter.network.models.CityData;
+
+import io.reactivex.Single;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Created by vihaanverma on 16/01/18.
+ */
+
+public class CitiesRemoteDataSource implements CitiesDataSource {
+
+    private static CitiesRemoteDataSource INSTANCE;
+
+    private CitiesRemoteDataSource(){
+
+    }
+
+    public static CitiesRemoteDataSource getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CitiesRemoteDataSource();
+        }
+        return INSTANCE;
+    }
+
+    @Override
+    public Single<CityData> getCities() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiClient.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+
+        ApiClient apiClient = retrofit.create(ApiClient.class);
+
+        return apiClient.getCities();
+    }
+}

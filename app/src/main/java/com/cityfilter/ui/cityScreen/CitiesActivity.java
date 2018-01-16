@@ -1,10 +1,10 @@
 package com.cityfilter.ui.cityScreen;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.cityfilter.R;
+import com.cityfilter.data.Injection;
 import com.cityfilter.utils.ActivityUtils;
 
 public class CitiesActivity extends AppCompatActivity {
@@ -24,7 +24,7 @@ public class CitiesActivity extends AppCompatActivity {
     }
 
     private void initPresenter(){
-        mPresenter = new CitiesPresenter(mCitiesFragment);
+        mPresenter = new CitiesPresenter(Injection.provideCitiesRepository(getApplicationContext()),mCitiesFragment);
     }
 
     private CitiesFragment mCitiesFragment;

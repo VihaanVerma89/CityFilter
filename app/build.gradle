@@ -21,6 +21,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // Using gradle plugin 3 you need to specify flavor dimensions.
+    flavorDimensions 'buildType'
+
+    // If you need to add more flavors, consider using flavor dimensions.
+    productFlavors {
+        mock {
+            dimension 'buildType'
+            applicationIdSuffix = ".mock"
+        }
+        prod {
+            dimension 'buildType'
+        }
+    }
 }
 
 dependencies {

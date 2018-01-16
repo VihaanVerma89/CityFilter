@@ -2,6 +2,7 @@ package com.cityfilter.ui.cityScreen;
 
 import android.support.annotation.NonNull;
 
+import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.network.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,25 +19,19 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @NonNull
     private CitiesContract.View mView;
-
-
-    public CitiesPresenter(@NonNull CitiesContract.View view) {
+    @NonNull
+    private CitiesRepository mRepository;
+    public CitiesPresenter(@NonNull CitiesRepository repository , @NonNull CitiesContract.View
+            view) {
+        mRepository = repository;
         mView = view;
         mView.setPresenter(this);
     }
 
     @Override
     public void subscribe() {
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiClient.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        ApiClient apiClient = retrofit.create(ApiClient.class);
-
-        apiClient.getCities()
+        mRepository
+                .getCities()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cities -> {
