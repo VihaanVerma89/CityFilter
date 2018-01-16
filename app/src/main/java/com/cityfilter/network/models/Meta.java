@@ -1,5 +1,5 @@
 
-package com.example;
+package com.cityfilter.network.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,7 +20,7 @@ public class Meta {
     private Integer count;
     @SerializedName("previous")
     @Expose
-    private java.lang.Object previous;
+    private City previous;
 
     public Integer getLimit() {
         return limit;
@@ -54,11 +54,11 @@ public class Meta {
         this.count = count;
     }
 
-    public java.lang.Object getPrevious() {
+    public City getPrevious() {
         return previous;
     }
 
-    public void setPrevious(java.lang.Object previous) {
+    public void setPrevious(City previous) {
         this.previous = previous;
     }
 

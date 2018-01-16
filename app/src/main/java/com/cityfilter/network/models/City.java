@@ -1,10 +1,10 @@
 
-package com.example;
+package com.cityfilter.network.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Object {
+public class City {
 
     @SerializedName("id")
     @Expose

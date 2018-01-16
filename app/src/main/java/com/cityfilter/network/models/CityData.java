@@ -1,5 +1,5 @@
 
-package com.example;
+package com.cityfilter.network.models;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -10,9 +10,9 @@ public class CityData {
     @SerializedName("meta")
     @Expose
     private Meta meta;
-    @SerializedName("objects")
+    @SerializedName("cities")
     @Expose
-    private List<Object> objects = null;
+    private List<City> cities = null;
 
     public Meta getMeta() {
         return meta;
@@ -22,12 +22,12 @@ public class CityData {
         this.meta = meta;
     }
 
-    public List<Object> getObjects() {
-        return objects;
+    public List<City> getCities() {
+        return cities;
     }
 
-    public void setObjects(List<Object> objects) {
-        this.objects = objects;
+    public void setCities(List<City> cities) {
+        this.cities = cities;
     }
 
 }
