@@ -1,6 +1,8 @@
 package com.cityfilter.data;
 
-import com.cityfilter.network.models.CityData;
+import com.cityfilter.network.models.City;
+
+import java.util.List;
 
 import io.reactivex.Single;
 
@@ -9,5 +11,6 @@ import io.reactivex.Single;
  */
 
 public interface CitiesDataSource {
-    Single<CityData> getCities();
+    Single<List<City>> getCities();
+    void setCities(List<City> cities);
 }

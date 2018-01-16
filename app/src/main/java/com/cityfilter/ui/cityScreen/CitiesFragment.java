@@ -95,9 +95,9 @@ public class CitiesFragment extends Fragment
     private List<City> mCities;
 
     @Override
-    public void showCities(CityData cityData) {
+    public void showCities(List<City> cities) {
         if (isAdded()) {
-            mCities = cityData.getCities();
+            mCities = cities;
             mCitiesAdapter = new CitiesAdapter(getActivity(), this, mCities);
             mRecyclerView.setAdapter(mCitiesAdapter);
         }

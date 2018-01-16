@@ -1,10 +1,11 @@
 package com.cityfilter.data;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.cityfilter.network.models.CityData;
+import com.cityfilter.data.local.CitiesDao;
+import com.cityfilter.network.models.City;
+
+import java.util.List;
 
 import io.reactivex.Single;
 
@@ -14,22 +15,30 @@ import io.reactivex.Single;
 
 public class CitiesLocalDataSource implements CitiesDataSource {
 
+    private CitiesDao mCitiesDao;
+
     @Nullable
     private static CitiesLocalDataSource INSTANCE;
 
-    private  CitiesLocalDataSource(){
-
+    private  CitiesLocalDataSource(CitiesDao citiesDao){
+        mCitiesDao=citiesDao;
     }
 
-    public static CitiesLocalDataSource getInstance( ){
+    public static CitiesLocalDataSource getInstance(CitiesDao citiesDao){
         if (INSTANCE == null) {
-            INSTANCE = new CitiesLocalDataSource();
+
+            INSTANCE = new CitiesLocalDataSource(citiesDao);
         }
         return INSTANCE;
     }
 
     @Override
-    public Single<CityData> getCities() {
-        return null;
+    public Single<List<City>> getCities() {
+        return mCitiesDao.getCities();
+    }
+
+    @Override
+    public void setCities(List<City> cities) {
+        mCitiesDao.insertCities(cities);
     }
 }

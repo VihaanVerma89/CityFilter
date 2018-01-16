@@ -1,7 +1,9 @@
 package com.cityfilter.data;
 
 import com.cityfilter.network.ApiClient;
-import com.cityfilter.network.models.CityData;
+import com.cityfilter.network.models.City;
+
+import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.Retrofit;
@@ -28,7 +30,7 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
     }
 
     @Override
-    public Single<CityData> getCities() {
+    public Single<List<City>> getCities() {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiClient.BASE_URL)
@@ -38,6 +40,11 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
 
         ApiClient apiClient = retrofit.create(ApiClient.class);
 
-        return apiClient.getCities();
+        return apiClient.getCities().map(cityData ->cityData.getCities());
+    }
+
+    @Override
+    public void setCities(List<City> cities) {
+
     }
 }

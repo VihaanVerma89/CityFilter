@@ -3,7 +3,9 @@ package com.cityfilter.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.cityfilter.network.models.CityData;
+import com.cityfilter.network.models.City;
+
+import java.util.List;
 
 import io.reactivex.Single;
 
@@ -37,14 +39,22 @@ public class CitiesRepository implements CitiesDataSource {
 
 
     @Override
-    public Single<CityData> getCities() {
+    public Single<List<City>> getCities() {
 
         return getAndSaveRemoteCity();
     }
 
-    private Single<CityData> getAndSaveRemoteCity() {
+    @Override
+    public void setCities(List<City> cities) {
+
+    }
+
+    private Single<List<City>> getAndSaveRemoteCity() {
         return mRemoteDataSource
-                .getCities();
+                .getCities()
+                .doOnSuccess(cities ->{
+                    mLocalDataSource.setCities(cities);
+                });
 
     }
 }
