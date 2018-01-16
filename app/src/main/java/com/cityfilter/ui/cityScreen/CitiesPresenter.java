@@ -40,6 +40,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cities -> {
+                            mView.hideProgressView();
                             mView.showCities(cities);
                         },
                         error -> {

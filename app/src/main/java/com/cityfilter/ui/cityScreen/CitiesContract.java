@@ -15,6 +15,8 @@ public interface CitiesContract {
         void showCities(CityData cities);
 
         void showCitiesError(Throwable error);
+
+        void hideProgressView();
     }
 
     interface Presenter extends BasePresenter{

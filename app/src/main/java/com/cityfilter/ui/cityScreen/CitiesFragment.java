@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.cityfilter.R;
+import com.cityfilter.network.models.City;
 import com.cityfilter.network.models.CityData;
+
+import java.util.List;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -49,12 +52,14 @@ public class CitiesFragment extends Fragment implements CitiesContract.View {
         mProgressBar = getView().findViewById(R.id.progressBar);
     }
 
-    private void hideProgressView(){
+    @Override
+    public void hideProgressView(){
         mProgressBar.setVisibility(View.GONE);
     }
 
 
     private RecyclerView mRecyclerView;
+    private CitiesAdapter mCitiesAdapter;
     private void initRecyclerView(){
         mRecyclerView = getView().findViewById(R.id.citiesRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -80,8 +85,13 @@ public class CitiesFragment extends Fragment implements CitiesContract.View {
     }
 
     @Override
-    public void showCities(CityData cities) {
-
+    public void showCities(CityData cityData) {
+        if(isAdded())
+        {
+            List<City> cities = cityData.getCities();
+            mCitiesAdapter = new CitiesAdapter(getActivity(), cities);
+            mRecyclerView.setAdapter(mCitiesAdapter);
+        }
     }
 
     @Override
