@@ -20,9 +20,15 @@ public interface CitiesContract {
         void showCitiesError(Throwable error);
 
         void hideProgressView();
+        void hideSwipeRefreshView();
+
+        void showToast(String message, int lengthShort);
     }
 
     interface Presenter extends BasePresenter{
 
+        void loadCities();
+
+        void refreshCities();
     }
 }

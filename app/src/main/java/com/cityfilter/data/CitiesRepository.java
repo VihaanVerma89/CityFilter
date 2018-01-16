@@ -1,10 +1,12 @@
 package com.cityfilter.data;
 
+import android.icu.util.IslamicCalendar;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.cityfilter.network.models.City;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -18,6 +20,8 @@ public class CitiesRepository implements CitiesDataSource {
     @Nullable
     private static CitiesRepository INSTANCE = null;
     private CitiesDataSource mLocalDataSource, mRemoteDataSource;
+    private List<City> mCityCache;
+    private boolean mIsCacheDirty;
 
     private CitiesRepository(@NonNull CitiesDataSource citiesLocalDataSource,
                              @NonNull CitiesDataSource citiesRemoteDataSource) {
@@ -40,14 +44,24 @@ public class CitiesRepository implements CitiesDataSource {
 
     @Override
     public Single<List<City>> getCities() {
+        if (mCityCache != null && !mIsCacheDirty) {
+            return Single.just(mCityCache);
+        } else if (mCityCache == null) {
+            mCityCache = new ArrayList<>();
+        }
 
         Single<List<City>> remoteCities = getAndSaveRemoteCity();
-        Single<List<City>> localCities = getLocalCities();
 
-       return Single
-               .concat(localCities, remoteCities)
-               .filter(cities -> !cities.isEmpty())
-               .firstOrError();
+        if (mIsCacheDirty) {
+            return remoteCities;
+        } else {
+
+            Single<List<City>> localCities = getAndCacheLocalCities();
+            return Single
+                    .concat(localCities, remoteCities)
+                    .filter(cities -> !cities.isEmpty())
+                    .firstOrError();
+        }
     }
 
     @Override
@@ -58,13 +72,22 @@ public class CitiesRepository implements CitiesDataSource {
     private Single<List<City>> getAndSaveRemoteCity() {
         return mRemoteDataSource
                 .getCities()
-                .doOnSuccess(cities ->{
+                .doOnSuccess(cities -> {
                     mLocalDataSource.setCities(cities);
+                    mIsCacheDirty = false;
                 });
 
     }
 
-    private Single<List<City>> getLocalCities(){
-        return mLocalDataSource.getCities();
+    private Single<List<City>> getAndCacheLocalCities() {
+        return mLocalDataSource
+                .getCities()
+                .doOnSuccess(cities -> {
+                    mCityCache = cities;
+                });
+    }
+
+    public void refreshCities(){
+        mIsCacheDirty = true;
     }
 }
