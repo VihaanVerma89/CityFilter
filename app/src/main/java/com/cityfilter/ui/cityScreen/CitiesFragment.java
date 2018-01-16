@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.cityfilter.R;
 import com.cityfilter.network.models.City;
 import com.cityfilter.network.models.CityData;
+import com.cityfilter.utils.CityUtil;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -147,8 +149,7 @@ public class CitiesFragment extends Fragment
 
     @Override
     public void onCityClicked(int position) {
-        String cityName = mCities.get(position).getName();
-        String toast = new StringBuilder("Selection is - ").append(cityName).toString();
+        String toast = CityUtil.getCitySelectionText(mCities.get(position));
         Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
     }
 }

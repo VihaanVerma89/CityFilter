@@ -10,6 +10,8 @@ import android.support.test.espresso.remote.InteractionResponse;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.util.Pair;
+import android.support.v4.widget.TextViewCompat;
 
 import com.cityfilter.R;
 import com.cityfilter.data.CitiesRemoteDataSource;
@@ -18,6 +20,7 @@ import com.cityfilter.data.Injection;
 import com.cityfilter.network.ApiClient;
 import com.cityfilter.network.models.City;
 import com.cityfilter.ui.cityScreen.CitiesActivity;
+import com.cityfilter.utils.CityUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,11 +40,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -80,24 +85,51 @@ public class CitiesScreenTest {
     }
 
     @Test
-    public void testRandomCity(){
+    public void testRandomCityIsShown(){
+//        Random random = new Random();
+//        int i = random.nextInt(mCities.size());
+//        City city = mCities.get(i);
+//        testCityIsShown(city,i);
+        Pair<Integer, City> pair = getRandomCity();
+        testCityIsShown(pair.first,pair.second);
+//        onView(ViewMatchers.withId(R.id.citiesRecyclerView))
+//                .perform(RecyclerViewActions.scrollToPosition(cityIndex));
+//        onView(withText(city.getName())).check(matches(isDisplayed()));
+    }
+
+    private Pair<Integer, City> getRandomCity(){
         Random random = new Random();
-        int cityIndex = random.nextInt(mCities.size());
-        City city = mCities.get(cityIndex);
+        int i = random.nextInt(mCities.size());
+        City city = mCities.get(i);
+        return new Pair<>(i, city);
+    }
+
+    private void testCityIsShown(int position, City city)
+    {
         onView(ViewMatchers.withId(R.id.citiesRecyclerView))
-                .perform(RecyclerViewActions.scrollToPosition(cityIndex));
+                .perform(RecyclerViewActions.scrollToPosition(position));
         onView(withText(city.getName())).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testAllCity(){
+    public void testAllCitesAreShown(){
         for(int i=0;i<mCities.size();i++)
         {
-            City city = mCities.get(i);
-            onView(ViewMatchers.withId(R.id.citiesRecyclerView))
-                    .perform(RecyclerViewActions.scrollToPosition(i));
-            onView(withText(city.getName())).check(matches(isDisplayed()));
+            testCityIsShown(i, mCities.get(i));
         }
+    }
+
+    @Test
+    public void testToast(){
+        Pair<Integer, City> pair= getRandomCity();
+        String toastText = CityUtil.getCitySelectionText(pair.second);
+
+        onView(ViewMatchers.withId(R.id.citiesRecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(pair.first, click()));
+        onView(withText(toastText))
+                .inRoot(withDecorView(not(is(mCitiesActivityTestRule.getActivity().getWindow()
+                        .getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 
 
