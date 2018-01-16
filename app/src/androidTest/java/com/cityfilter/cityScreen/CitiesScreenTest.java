@@ -58,8 +58,8 @@ public class CitiesScreenTest {
 
     private List<City> mCities;
     @Rule
-    public ActivityTestRule<CitiesActivity> mCitiesActivityTestRule=
-            new ActivityTestRule<CitiesActivity>(CitiesActivity.class){
+    public ActivityTestRule<CitiesActivity> mCitiesActivityTestRule =
+            new ActivityTestRule<CitiesActivity>(CitiesActivity.class) {
 
                 @Override
                 protected void beforeActivityLaunched() {
@@ -85,43 +85,34 @@ public class CitiesScreenTest {
     }
 
     @Test
-    public void testRandomCityIsShown(){
-//        Random random = new Random();
-//        int i = random.nextInt(mCities.size());
-//        City city = mCities.get(i);
-//        testCityIsShown(city,i);
+    public void testRandomCityIsShown() {
         Pair<Integer, City> pair = getRandomCity();
-        testCityIsShown(pair.first,pair.second);
-//        onView(ViewMatchers.withId(R.id.citiesRecyclerView))
-//                .perform(RecyclerViewActions.scrollToPosition(cityIndex));
-//        onView(withText(city.getName())).check(matches(isDisplayed()));
+        testCityIsShown(pair.first, pair.second);
     }
 
-    private Pair<Integer, City> getRandomCity(){
+    private Pair<Integer, City> getRandomCity() {
         Random random = new Random();
         int i = random.nextInt(mCities.size());
         City city = mCities.get(i);
         return new Pair<>(i, city);
     }
 
-    private void testCityIsShown(int position, City city)
-    {
+    private void testCityIsShown(int position, City city) {
         onView(ViewMatchers.withId(R.id.citiesRecyclerView))
                 .perform(RecyclerViewActions.scrollToPosition(position));
         onView(withText(city.getName())).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testAllCitesAreShown(){
-        for(int i=0;i<mCities.size();i++)
-        {
+    public void testAllCitesAreShown() {
+        for (int i = 0; i < mCities.size(); i++) {
             testCityIsShown(i, mCities.get(i));
         }
     }
 
     @Test
-    public void testToast(){
-        Pair<Integer, City> pair= getRandomCity();
+    public void testToast() {
+        Pair<Integer, City> pair = getRandomCity();
         String toastText = CityUtil.getCitySelectionText(pair.second);
 
         onView(ViewMatchers.withId(R.id.citiesRecyclerView))
