@@ -41,4 +41,9 @@ public class CitiesLocalDataSource implements CitiesDataSource {
     public void setCities(List<City> cities) {
         mCitiesDao.insertCities(cities);
     }
+
+    @Override
+    public void deleteAllCities() {
+       mCitiesDao.deleteAllCities();
+    }
 }

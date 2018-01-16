@@ -13,4 +13,5 @@ import io.reactivex.Single;
 public interface CitiesDataSource {
     Single<List<City>> getCities();
     void setCities(List<City> cities);
+    void deleteAllCities();
 }

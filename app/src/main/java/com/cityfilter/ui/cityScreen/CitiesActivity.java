@@ -1,15 +1,21 @@
 package com.cityfilter.ui.cityScreen;
 
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.cityfilter.R;
 import com.cityfilter.data.Injection;
 import com.cityfilter.utils.ActivityUtils;
+import com.cityfilter.utils.EspressoIdlingResource;
 
 public class CitiesActivity extends AppCompatActivity {
 
     private CitiesPresenter mPresenter;
+
+    @VisibleForTesting
+    public static final String ROW_TEXT = "ROW_TEXT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,4 +45,8 @@ public class CitiesActivity extends AppCompatActivity {
         }
     }
 
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
+    }
 }

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.network.models.City;
+import com.cityfilter.utils.EspressoIdlingResource;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -44,10 +45,16 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public void loadCities() {
+        EspressoIdlingResource.increment();
         mRepository
                 .getCities()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(()->{
+                    if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                        EspressoIdlingResource.decrement(); // Set app as idle.
+                    }
+                })
                 .subscribe(cities -> {
                             processCities(cities);
                         },

@@ -68,6 +68,11 @@ public class CitiesRepository implements CitiesDataSource {
 
     }
 
+    @Override
+    public void deleteAllCities() {
+        mLocalDataSource.deleteAllCities();
+    }
+
     private Single<List<City>> getAndSaveRemoteCity() {
         return mRemoteDataSource
                 .getCities()

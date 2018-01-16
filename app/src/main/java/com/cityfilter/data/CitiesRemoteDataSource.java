@@ -47,4 +47,9 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
     public void setCities(List<City> cities) {
 
     }
+
+    @Override
+    public void deleteAllCities() {
+
+    }
 }
