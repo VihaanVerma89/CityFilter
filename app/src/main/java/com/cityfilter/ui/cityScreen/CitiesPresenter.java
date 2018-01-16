@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.cityfilter.data.CitiesRepository;
-import com.cityfilter.network.ApiClient;
 import com.cityfilter.network.models.City;
 
 import java.net.UnknownHostException;
@@ -13,9 +12,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -53,7 +49,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cities -> {
-                            showCities(cities);
+                            processCities(cities);
                         },
                         error -> {
                             processError(error);
@@ -62,11 +58,11 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public void refreshCities() {
-        mRepository.refreshCities();
+        mRepository.setCacheDirty();
         loadCities();
     }
 
-    private void showCities(List<City> cities) {
+    private void processCities(List<City> cities) {
         mView.hideProgressView();
         mView.hideSwipeRefreshView();
         mView.showCities(cities);

@@ -139,7 +139,8 @@ public class CitiesFragment extends Fragment
         }
     }
 
-    private void showToast(String text, int type)
+    @Override
+    public void showToast(String text, int type)
     {
         Toast.makeText(getActivity(), text, type).show();
     }

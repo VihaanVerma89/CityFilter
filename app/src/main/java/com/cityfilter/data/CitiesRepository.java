@@ -1,6 +1,5 @@
 package com.cityfilter.data;
 
-import android.icu.util.IslamicCalendar;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -21,7 +20,7 @@ public class CitiesRepository implements CitiesDataSource {
     private static CitiesRepository INSTANCE = null;
     private CitiesDataSource mLocalDataSource, mRemoteDataSource;
     private List<City> mCityCache;
-    private boolean mIsCacheDirty;
+    private boolean mCacheIsDirty;
 
     private CitiesRepository(@NonNull CitiesDataSource citiesLocalDataSource,
                              @NonNull CitiesDataSource citiesRemoteDataSource) {
@@ -44,7 +43,7 @@ public class CitiesRepository implements CitiesDataSource {
 
     @Override
     public Single<List<City>> getCities() {
-        if (mCityCache != null && !mIsCacheDirty) {
+        if (mCityCache != null && !mCacheIsDirty) {
             return Single.just(mCityCache);
         } else if (mCityCache == null) {
             mCityCache = new ArrayList<>();
@@ -52,7 +51,7 @@ public class CitiesRepository implements CitiesDataSource {
 
         Single<List<City>> remoteCities = getAndSaveRemoteCity();
 
-        if (mIsCacheDirty) {
+        if (mCacheIsDirty) {
             return remoteCities;
         } else {
 
@@ -74,7 +73,7 @@ public class CitiesRepository implements CitiesDataSource {
                 .getCities()
                 .doOnSuccess(cities -> {
                     mLocalDataSource.setCities(cities);
-                    mIsCacheDirty = false;
+                    mCacheIsDirty = false;
                 });
 
     }
@@ -87,7 +86,7 @@ public class CitiesRepository implements CitiesDataSource {
                 });
     }
 
-    public void refreshCities(){
-        mIsCacheDirty = true;
+    public void setCacheDirty(){
+        mCacheIsDirty = true;
     }
 }
