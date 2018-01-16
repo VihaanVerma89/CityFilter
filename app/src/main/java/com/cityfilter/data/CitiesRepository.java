@@ -41,7 +41,13 @@ public class CitiesRepository implements CitiesDataSource {
     @Override
     public Single<List<City>> getCities() {
 
-        return getAndSaveRemoteCity();
+        Single<List<City>> remoteCities = getAndSaveRemoteCity();
+        Single<List<City>> localCities = getLocalCities();
+
+       return Single
+               .concat(localCities, remoteCities)
+               .filter(cities -> !cities.isEmpty())
+               .firstOrError();
     }
 
     @Override
@@ -56,5 +62,9 @@ public class CitiesRepository implements CitiesDataSource {
                     mLocalDataSource.setCities(cities);
                 });
 
+    }
+
+    private Single<List<City>> getLocalCities(){
+        return mLocalDataSource.getCities();
     }
 }
