@@ -1,7 +1,9 @@
-package com.cityfilter;
+package com.cityfilter.ui.cityScreen;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.cityfilter.R;
 
 public class MainActivity extends AppCompatActivity {
 
