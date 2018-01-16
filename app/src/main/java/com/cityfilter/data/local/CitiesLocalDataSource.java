@@ -1,8 +1,8 @@
-package com.cityfilter.data;
+package com.cityfilter.data.local;
 
 import android.support.annotation.Nullable;
 
-import com.cityfilter.data.local.CitiesDao;
+import com.cityfilter.data.CitiesDataSource;
 import com.cityfilter.network.models.City;
 
 import java.util.List;
@@ -30,6 +30,10 @@ public class CitiesLocalDataSource implements CitiesDataSource {
             INSTANCE = new CitiesLocalDataSource(citiesDao);
         }
         return INSTANCE;
+    }
+
+    public static void destroyInstance() {
+        INSTANCE = null;
     }
 
     @Override

@@ -45,4 +45,23 @@ public class City {
         this.slug = slug;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof City)
+        {
+           City city  = (City) obj;
+           if(city.getId() == id)
+           {
+               if(city.getName().equalsIgnoreCase(name))
+               {
+                   if(city.getSlug().equalsIgnoreCase(slug))
+                   {
+                       return true;
+                   }
+               }
+           }
+        }
+        return false;
+    }
 }
+
