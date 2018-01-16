@@ -10,9 +10,8 @@ import retrofit2.http.GET;
  */
 
 public interface ApiClient {
-    public static final String BASE_URL = "https://api.aasaanjobs.com/api/v4/";
+    public static final String BASE_URL = "https://api.aasaanjobs.com/";
 
-    @GET("/city")
+    @GET("/api/v4/city/")
     Single<CityData> getCities();
-
 }

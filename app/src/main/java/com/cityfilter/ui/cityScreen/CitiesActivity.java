@@ -33,8 +33,9 @@ public class CitiesActivity extends AppCompatActivity {
                 .frameLayout);
         if(mCitiesFragment==null)
         {
-            ActivityUtils.showFragment(getSupportFragmentManager(), R.id.frameLayout, CitiesFragment
-                    .newInstance());
+            mCitiesFragment = CitiesFragment.newInstance();
+            ActivityUtils.showFragment(getSupportFragmentManager(), R.id.frameLayout,
+                    mCitiesFragment);
         }
     }
 

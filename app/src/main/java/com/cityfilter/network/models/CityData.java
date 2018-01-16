@@ -10,7 +10,7 @@ public class CityData {
     @SerializedName("meta")
     @Expose
     private Meta meta;
-    @SerializedName("cities")
+    @SerializedName("objects")
     @Expose
     private List<City> cities = null;
 

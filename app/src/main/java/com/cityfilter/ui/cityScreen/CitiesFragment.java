@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.cityfilter.R;
+import com.cityfilter.network.models.CityData;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -76,5 +77,15 @@ public class CitiesFragment extends Fragment implements CitiesContract.View {
     public void onPause() {
         super.onPause();
         mPresenter.unsubscribe();
+    }
+
+    @Override
+    public void showCities(CityData cities) {
+
+    }
+
+    @Override
+    public void showCitiesError(Throwable error) {
+
     }
 }
