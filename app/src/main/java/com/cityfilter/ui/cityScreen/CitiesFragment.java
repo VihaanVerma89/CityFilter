@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -126,6 +128,15 @@ public class CitiesFragment extends Fragment
                 .subscribe(cities ->{
                     showCities(cities);
                 });
+
+
+        ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
+        EditText searchET = searchView.findViewById(R.id.search_src_text);
+
+        closeButton.setOnClickListener(view -> {
+            mPresenter.loadCities();
+            searchET.setText("");
+        });
     }
 
     private CitiesContract.Presenter mPresenter;
