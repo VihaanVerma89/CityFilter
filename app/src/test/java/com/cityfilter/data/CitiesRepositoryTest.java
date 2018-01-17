@@ -15,6 +15,7 @@ import io.reactivex.Single;
 import io.reactivex.subscribers.TestSubscriber;
 
 import static junit.framework.Assert.assertFalse;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +49,7 @@ public class CitiesRepositoryTest {
     }
 
     @Test
-    public void getCities(){
+    public void getCitiesFromLocalDataSource(){
         setCitiesAvailable(mCitiesLocalDataSource, mCities);
         setCitiesNotAvailable(mCitiesRemoteDataSource);
 
@@ -61,6 +62,37 @@ public class CitiesRepositoryTest {
         assertFalse(mRepository.mCacheIsDirty);
 
         subscriber1.assertValue(mCities);
+    }
+
+    @Test
+    public void getCitiesFromRemoteDataSource(){
+        setCitiesAvailable(mCitiesRemoteDataSource, mCities);
+        setCitiesNotAvailable(mCitiesLocalDataSource);
+
+        TestSubscriber<List<City>> subscriber1 = new TestSubscriber<>();
+        mRepository.getCities().toFlowable().subscribe(subscriber1);
+
+        verify(mCitiesLocalDataSource).getCities();
+        verify(mCitiesRemoteDataSource).getCities();
+
+        assertFalse(mRepository.mCacheIsDirty);
+
+        subscriber1.assertValue(mCities);
+    }
+
+    @Test
+    public void getCitiesAfterSwipeRefresh(){
+        setCitiesAvailable(mCitiesRemoteDataSource, mCities);
+
+        mRepository.setCacheDirty();
+
+        TestSubscriber<List<City>> subscriber = new TestSubscriber<>();
+        mRepository.getCities().toFlowable().subscribe(subscriber);
+
+        verify(mCitiesLocalDataSource, never()).getCities();
+        verify(mCitiesRemoteDataSource).getCities();
+
+        subscriber.assertValue(mCities);
     }
 
     private void setCitiesAvailable(CitiesDataSource dataSource, List<City> cities){
