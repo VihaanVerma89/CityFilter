@@ -122,13 +122,20 @@ public class CitiesFragment extends Fragment
         RxSearchView.queryTextChanges(searchView)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(charSequence -> charSequence.toString())
-                .filter(text -> !text.isEmpty())
-                .distinctUntilChanged()
+                .filter(text -> {
+                    if(text.isEmpty())
+                    {
+                        mPresenter.loadCities();
+                    }
+                    return !text.isEmpty();
+                })
                 .switchMap(text -> mPresenter.loadCities(text).toObservable())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cities ->{
                     showCities(cities);
                 });
+
+
 
 
         ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
