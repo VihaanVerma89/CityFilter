@@ -82,12 +82,13 @@ public class CitiesFragment extends Fragment
     }
 
     private void initToolbar(){
-        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.toolbar);
+        Toolbar toolbar = getView().findViewById(R.id.toolbar);
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         appCompatActivity.setSupportActionBar(toolbar);
         appCompatActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         final ActionBar ab = appCompatActivity.getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
     }
 
     private RecyclerView mRecyclerView;
@@ -175,7 +176,7 @@ public class CitiesFragment extends Fragment
     @Override
     public void onCityClicked(int position) {
         String toast = CityUtil.getCitySelectionText(mCities.get(position));
-        Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
     }
 
 }
