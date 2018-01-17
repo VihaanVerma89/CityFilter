@@ -1,7 +1,6 @@
 package com.cityfilter.ui.cityScreen;
 
 import android.support.annotation.NonNull;
-import android.util.MutableShort;
 import android.widget.Toast;
 
 import com.cityfilter.data.CitiesRepository;
@@ -12,8 +11,8 @@ import com.cityfilter.utils.schedulers.BaseSchedulerProvider;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import retrofit2.HttpException;
 
 /**
@@ -29,12 +28,16 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     @NonNull
     private BaseSchedulerProvider mSchedulerProvider;
 
+    @NonNull
+    private CompositeDisposable mCompositeDisposable;
+
     public CitiesPresenter(@NonNull CitiesRepository repository, @NonNull CitiesContract.View
             view, @NonNull BaseSchedulerProvider schedulerProvider) {
         mRepository = repository;
         mView = view;
         mView.setPresenter(this);
         mSchedulerProvider=schedulerProvider;
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -45,17 +48,18 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public void unsubscribe() {
-
+        mCompositeDisposable.clear();
     }
 
     @Override
     public void loadCities() {
         EspressoIdlingResource.increment();
-        mRepository
+        mCompositeDisposable.clear();
+        Disposable disposable = mRepository
                 .getCities()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .doFinally(()->{
+                .doFinally(() -> {
                     if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
                         EspressoIdlingResource.decrement(); // Set app as idle.
                     }
@@ -66,6 +70,8 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                         error -> {
                             processError(error);
                         });
+
+        mCompositeDisposable.add(disposable);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.cityfilter.ui.cityScreen;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -16,13 +14,9 @@ import android.widget.Toast;
 
 import com.cityfilter.R;
 import com.cityfilter.network.models.City;
-import com.cityfilter.network.models.CityData;
 import com.cityfilter.utils.CityUtil;
 
-import java.net.UnknownHostException;
 import java.util.List;
-
-import retrofit2.HttpException;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -126,19 +120,9 @@ public class CitiesFragment extends Fragment
 
     @Override
     public void showCities(List<City> cities) {
-        if (isAdded()) {
             mCities = cities;
             mCitiesAdapter = new CitiesAdapter(getActivity(), this, mCities);
             mRecyclerView.setAdapter(mCitiesAdapter);
-        }
-    }
-
-    @Override
-    public void showCitiesError(Throwable error) {
-        if (isAdded()) {
-
-
-        }
     }
 
     @Override

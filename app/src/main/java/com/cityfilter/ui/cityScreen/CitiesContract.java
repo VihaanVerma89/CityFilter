@@ -1,7 +1,6 @@
 package com.cityfilter.ui.cityScreen;
 
 import com.cityfilter.network.models.City;
-import com.cityfilter.network.models.CityData;
 import com.cityfilter.ui.BasePresenter;
 import com.cityfilter.ui.BaseView;
 
@@ -17,7 +16,6 @@ public interface CitiesContract {
 
         void showCities(List<City> cities);
 
-        void showCitiesError(Throwable error);
 
         void hideProgressView();
         void hideSwipeRefreshView();
