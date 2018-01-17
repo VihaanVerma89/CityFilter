@@ -25,3 +25,12 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// Define versions in a single place
+ext {
+    // App dependencies
+    supportLibraryVersion = '26.1.0'
+    mockitoVersion = '1.10.19'
+    espressoVersion = '3.0.1'
+    retrofitVersion = '2.3.0'
+}
