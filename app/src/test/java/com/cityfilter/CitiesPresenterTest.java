@@ -1,5 +1,6 @@
 package com.cityfilter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.widget.TextViewCompat;
 
 import com.cityfilter.data.CitiesRemoteDataSource;
@@ -7,6 +8,8 @@ import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.network.models.City;
 import com.cityfilter.ui.cityScreen.CitiesContract;
 import com.cityfilter.ui.cityScreen.CitiesPresenter;
+import com.cityfilter.utils.schedulers.BaseSchedulerProvider;
+import com.cityfilter.utils.schedulers.ImmediateSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,27 +37,32 @@ public class CitiesPresenterTest {
     @Mock
     private CitiesContract.View mView;
 
+    private BaseSchedulerProvider mSchedulerProvider;
+
     private CitiesPresenter mPresenter;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
         CitiesRemoteDataSource remoteDataSource = CitiesRemoteDataSource.getInstance();
-        mPresenter = new CitiesPresenter(mRepository, mView);
+        mSchedulerProvider = new ImmediateSchedulerProvider();
+        mPresenter = new CitiesPresenter(mRepository, mView, mSchedulerProvider);
         mCities = remoteDataSource.getCities().blockingGet();
     }
 
     @Test
     public void createPresenter_setPresenterToView(){
-        mPresenter=new CitiesPresenter(mRepository, mView);
+        mPresenter=new CitiesPresenter(mRepository, mView, mSchedulerProvider);
         verify(mView).setPresenter(mPresenter);
     }
 
     @Test
     public void loadCitiesFromRepository(){
         when(mRepository.getCities()).thenReturn(Single.just(mCities));
+        mPresenter.loadCities();
         verify(mView).hideSwipeRefreshView();
         verify(mView).hideSwipeRefreshView();
+        verify(mView).showCities(mCities);
     }
 
 

@@ -6,9 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.cityfilter.R;
+import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.data.Injection;
 import com.cityfilter.utils.ActivityUtils;
 import com.cityfilter.utils.EspressoIdlingResource;
+import com.cityfilter.utils.schedulers.BaseSchedulerProvider;
 
 public class CitiesActivity extends AppCompatActivity {
 
@@ -30,7 +32,9 @@ public class CitiesActivity extends AppCompatActivity {
     }
 
     private void initPresenter(){
-        mPresenter = new CitiesPresenter(Injection.provideCitiesRepository(getApplicationContext()),mCitiesFragment);
+        CitiesRepository repository = Injection.provideCitiesRepository(getApplicationContext());
+        BaseSchedulerProvider schedulerProvider = Injection.provideSchedulerProvider();
+        mPresenter = new CitiesPresenter(repository, mCitiesFragment, schedulerProvider);
     }
 
     private CitiesFragment mCitiesFragment;

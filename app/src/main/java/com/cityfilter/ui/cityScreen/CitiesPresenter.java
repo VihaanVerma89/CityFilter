@@ -1,11 +1,13 @@
 package com.cityfilter.ui.cityScreen;
 
 import android.support.annotation.NonNull;
+import android.util.MutableShort;
 import android.widget.Toast;
 
 import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.network.models.City;
 import com.cityfilter.utils.EspressoIdlingResource;
+import com.cityfilter.utils.schedulers.BaseSchedulerProvider;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -24,12 +26,15 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     private CitiesContract.View mView;
     @NonNull
     private CitiesRepository mRepository;
+    @NonNull
+    private BaseSchedulerProvider mSchedulerProvider;
 
     public CitiesPresenter(@NonNull CitiesRepository repository, @NonNull CitiesContract.View
-            view) {
+            view, @NonNull BaseSchedulerProvider schedulerProvider) {
         mRepository = repository;
         mView = view;
         mView.setPresenter(this);
+        mSchedulerProvider=schedulerProvider;
     }
 
     @Override
@@ -48,8 +53,8 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         EspressoIdlingResource.increment();
         mRepository
                 .getCities()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
                 .doFinally(()->{
                     if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
                         EspressoIdlingResource.decrement(); // Set app as idle.
