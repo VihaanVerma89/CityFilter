@@ -32,6 +32,8 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
     @Override
     public Single<List<City>> getCities() {
 
+        //TODO
+        // inject with dagger
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiClient.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

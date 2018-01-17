@@ -9,6 +9,7 @@ import com.cityfilter.network.models.City;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 /**
@@ -78,9 +79,18 @@ public class CitiesRepository implements CitiesDataSource {
     }
 
     @Override
-    public Single<List<City>> getCities(String text) {
-        Single<List<City>> localCities = mLocalDataSource.getCities(text);
-        return localCities;
+    public Single<List<City>> getCities(String searchTerm) {
+        Single<List<City>> searchedLocalCities = mLocalDataSource.getCities(searchTerm);
+        Single<List<City>> searchedRemoteCities = getAndSaveRemoteCity()
+                .toFlowable()
+                .flatMap(cities -> Flowable.fromIterable(cities))
+                .filter(city -> city.getName().contains(searchTerm))
+                .toList();
+
+        // Covers case when app started without internet and user searched city later on.
+        return Single.concat(searchedLocalCities, searchedRemoteCities)
+                .filter(cities -> !cities.isEmpty())
+                .firstOrError();
     }
 
     private Single<List<City>> getAndSaveRemoteCity() {
@@ -88,6 +98,7 @@ public class CitiesRepository implements CitiesDataSource {
                 .getCities()
                 .doOnSuccess(cities -> {
                     mLocalDataSource.setCities(cities);
+                    mCityCache = cities;
                     mCacheIsDirty = false;
                 });
 
@@ -101,7 +112,7 @@ public class CitiesRepository implements CitiesDataSource {
                 });
     }
 
-    public void setCacheDirty(){
+    public void setCacheDirty() {
         mCacheIsDirty = true;
     }
 }
