@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +52,7 @@ public class CitiesFragment extends Fragment
     }
 
     private void initViews() {
+        initToolbar();
         initSwipeRefreshLayout();
         initProgressBar();
         initRecyclerView();
@@ -70,6 +74,15 @@ public class CitiesFragment extends Fragment
         mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
+    private void initToolbar(){
+        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.toolbar);
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+        appCompatActivity.setSupportActionBar(toolbar);
+        appCompatActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final ActionBar ab = appCompatActivity.getSupportActionBar();
+//        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
 
     private RecyclerView mRecyclerView;
     private CitiesAdapter mCitiesAdapter;
@@ -120,14 +133,13 @@ public class CitiesFragment extends Fragment
 
     @Override
     public void showCities(List<City> cities) {
-            mCities = cities;
-            mCitiesAdapter = new CitiesAdapter(getActivity(), this, mCities);
-            mRecyclerView.setAdapter(mCitiesAdapter);
+        mCities = cities;
+        mCitiesAdapter = new CitiesAdapter(getActivity(), this, mCities);
+        mRecyclerView.setAdapter(mCitiesAdapter);
     }
 
     @Override
-    public void showToast(String text, int type)
-    {
+    public void showToast(String text, int type) {
         Toast.makeText(getActivity(), text, type).show();
     }
 
