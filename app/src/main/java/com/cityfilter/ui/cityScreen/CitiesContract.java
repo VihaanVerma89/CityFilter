@@ -14,18 +14,18 @@ import io.reactivex.Single;
 
 public interface CitiesContract {
 
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
 
         void showCities(List<City> cities);
 
-
         void hideProgressView();
+
         void hideSwipeRefreshView();
 
         void showToast(String message, int lengthShort);
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
 
         void loadCities();
 

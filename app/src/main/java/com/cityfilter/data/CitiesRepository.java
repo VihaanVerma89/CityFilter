@@ -70,7 +70,8 @@ public class CitiesRepository implements CitiesDataSource {
 
     @Override
     public void setCities(List<City> cities) {
-
+        mLocalDataSource.setCities(cities);
+        mRemoteDataSource.setCities(cities);
     }
 
     @Override

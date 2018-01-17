@@ -16,9 +16,6 @@ public class CitiesActivity extends AppCompatActivity {
 
     private CitiesPresenter mPresenter;
 
-    @VisibleForTesting
-    public static final String ROW_TEXT = "ROW_TEXT";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,23 +23,23 @@ public class CitiesActivity extends AppCompatActivity {
         initViews();
     }
 
-    private void initViews(){
+    private void initViews() {
         initFragment();
         initPresenter();
     }
 
-    private void initPresenter(){
+    private void initPresenter() {
         CitiesRepository repository = Injection.provideCitiesRepository(getApplicationContext());
         BaseSchedulerProvider schedulerProvider = Injection.provideSchedulerProvider();
         mPresenter = new CitiesPresenter(repository, mCitiesFragment, schedulerProvider);
     }
 
     private CitiesFragment mCitiesFragment;
-    private void initFragment(){
-        mCitiesFragment= (CitiesFragment) getSupportFragmentManager().findFragmentById(R.id
+
+    private void initFragment() {
+        mCitiesFragment = (CitiesFragment) getSupportFragmentManager().findFragmentById(R.id
                 .frameLayout);
-        if(mCitiesFragment==null)
-        {
+        if (mCitiesFragment == null) {
             mCitiesFragment = CitiesFragment.newInstance();
             ActivityUtils.showFragment(getSupportFragmentManager(), R.id.frameLayout,
                     mCitiesFragment);

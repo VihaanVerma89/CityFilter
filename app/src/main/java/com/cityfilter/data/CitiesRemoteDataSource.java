@@ -47,16 +47,17 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
 
     @Override
     public void setCities(List<City> cities) {
-
+        // update at server.
     }
 
     @Override
     public void deleteAllCities() {
-
+        // delete at server
     }
 
     @Override
     public Single<List<City>> getCities(String text) {
+        // search from server db
         return null;
     }
 }

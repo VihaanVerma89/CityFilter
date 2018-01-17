@@ -83,7 +83,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public Single<List<City>> loadCities(String text) {
-//        EspressoIdlingResource.increment();
+        EspressoIdlingResource.increment();
         return mRepository
                 .getCities(text)
                 .doFinally(() -> {

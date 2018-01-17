@@ -81,7 +81,7 @@ public class CitiesFragment extends Fragment
         mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         Toolbar toolbar = getView().findViewById(R.id.toolbar);
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         appCompatActivity.setSupportActionBar(toolbar);
@@ -117,25 +117,22 @@ public class CitiesFragment extends Fragment
         mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.refreshCities());
     }
 
-    private void initSearchView(){
-         android.support.v7.widget.SearchView searchView= getView().findViewById(R.id.searchView);
+    private void initSearchView() {
+        android.support.v7.widget.SearchView searchView = getView().findViewById(R.id.searchView);
         RxSearchView.queryTextChanges(searchView)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(charSequence -> charSequence.toString())
                 .filter(text -> {
-                    if(text.isEmpty())
-                    {
+                    if (text.isEmpty()) {
                         mPresenter.loadCities();
                     }
                     return !text.isEmpty();
                 })
                 .switchMap(text -> mPresenter.loadCities(text).toObservable())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(cities ->{
+                .subscribe(cities -> {
                     showCities(cities);
-                }) ;
-
-
+                });
 
 
         ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
