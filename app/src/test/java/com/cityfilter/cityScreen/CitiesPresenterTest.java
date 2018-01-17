@@ -63,6 +63,14 @@ public class CitiesPresenterTest {
     }
 
 
+    @Test
+    public void refreshCities(){
+        mPresenter.refreshCities();
+        verify(mRepository).setCacheDirty();
+        verify(mRepository).getCities();
+    }
+
+
 
 
 
