@@ -1,7 +1,4 @@
-package com.cityfilter;
-
-import android.support.annotation.NonNull;
-import android.support.v4.widget.TextViewCompat;
+package com.cityfilter.cityScreen;
 
 import com.cityfilter.data.CitiesRemoteDataSource;
 import com.cityfilter.data.CitiesRepository;

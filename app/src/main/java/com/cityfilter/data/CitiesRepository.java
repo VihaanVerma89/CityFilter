@@ -2,6 +2,7 @@ package com.cityfilter.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.cityfilter.network.models.City;
 
@@ -20,7 +21,10 @@ public class CitiesRepository implements CitiesDataSource {
     private static CitiesRepository INSTANCE = null;
     private CitiesDataSource mLocalDataSource, mRemoteDataSource;
     private List<City> mCityCache;
-    private boolean mCacheIsDirty;
+
+
+    @VisibleForTesting
+    boolean mCacheIsDirty;
 
     private CitiesRepository(@NonNull CitiesDataSource citiesLocalDataSource,
                              @NonNull CitiesDataSource citiesRemoteDataSource) {
