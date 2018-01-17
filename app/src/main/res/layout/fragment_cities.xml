@@ -32,25 +32,16 @@
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="pin">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_password"
-                    android:layout_width="match_parent"
-                    android:layout_alignParentBottom="true"
-                    app:layout_collapseMode="pin"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    >
 
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:hint="Enter Location..."
-                    android:inputType="text"
-                    />
-                </android.support.design.widget.TextInputLayout>
+                    <android.support.v7.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:iconifiedByDefault="false"
+                        android:layout_alignParentBottom="true"
+                        android:queryHint="@string/enter_location"
+                        app:iconifiedByDefault="false"
+                        app:queryHint="@string/enter_location" />
 
 
             </RelativeLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CityFilter</string>
+    <string name="enter_location">Enter Location</string>
 </resources>
