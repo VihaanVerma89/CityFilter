@@ -37,7 +37,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mRepository = repository;
         mView = view;
         mView.setPresenter(this);
-        mSchedulerProvider=schedulerProvider;
+        mSchedulerProvider = schedulerProvider;
         mCompositeDisposable = new CompositeDisposable();
     }
 
@@ -83,7 +83,14 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public Single<List<City>> loadCities(String text) {
-        return mRepository.getCities(text);
+//        EspressoIdlingResource.increment();
+        return mRepository
+                .getCities(text)
+                .doFinally(() -> {
+                    if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                        EspressoIdlingResource.decrement(); // Set app as idle.
+                    }
+                });
     }
 
     private void processCities(List<City> cities) {

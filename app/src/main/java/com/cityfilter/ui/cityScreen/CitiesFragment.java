@@ -133,7 +133,7 @@ public class CitiesFragment extends Fragment
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cities ->{
                     showCities(cities);
-                });
+                }) ;
 
 
 

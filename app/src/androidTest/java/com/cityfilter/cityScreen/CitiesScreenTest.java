@@ -1,23 +1,18 @@
 package com.cityfilter.cityScreen;
 
-import android.media.MediaCodecInfo;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.espresso.remote.InteractionResponse;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.util.Pair;
-import android.support.v4.widget.TextViewCompat;
 
 import com.cityfilter.R;
 import com.cityfilter.data.CitiesRemoteDataSource;
 import com.cityfilter.data.CitiesRepository;
 import com.cityfilter.data.Injection;
-import com.cityfilter.network.ApiClient;
 import com.cityfilter.network.models.City;
 import com.cityfilter.ui.cityScreen.CitiesActivity;
 import com.cityfilter.utils.CityUtil;
@@ -31,20 +26,14 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Random;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -86,11 +75,11 @@ public class CitiesScreenTest {
 
     @Test
     public void testRandomCityIsShown() {
-        Pair<Integer, City> pair = getRandomCity();
+        Pair<Integer, City> pair = getRandomCityPair();
         testCityIsShown(pair.first, pair.second);
     }
 
-    private Pair<Integer, City> getRandomCity() {
+    private Pair<Integer, City> getRandomCityPair() {
         Random random = new Random();
         int i = random.nextInt(mCities.size());
         City city = mCities.get(i);
@@ -112,7 +101,7 @@ public class CitiesScreenTest {
 
     @Test
     public void testToast() {
-        Pair<Integer, City> pair = getRandomCity();
+        Pair<Integer, City> pair = getRandomCityPair();
         String toastText = CityUtil.getCitySelectionText(pair.second);
 
         onView(ViewMatchers.withId(R.id.citiesRecyclerView))
@@ -121,6 +110,19 @@ public class CitiesScreenTest {
                 .inRoot(withDecorView(not(is(mCitiesActivityTestRule.getActivity().getWindow()
                         .getDecorView()))))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCitySearch(){
+        Pair<Integer, City> pair= getRandomCityPair();
+        City city=pair.second;
+        String searchText = city.getName().substring(0,2);
+        onView(withId(R.id.searchView))
+                .perform(click());
+        onView(withId(R.id.search_src_text))
+                .perform(typeText(searchText));
+
+        onView(withText(city.getName())).check(matches(isDisplayed()));
     }
 
 
