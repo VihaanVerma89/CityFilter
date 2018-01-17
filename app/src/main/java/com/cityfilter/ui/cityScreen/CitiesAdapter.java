@@ -49,6 +49,13 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CityViewHo
                 mListener.onCityClicked(position);
             }
         });
+        if(position == mCities.size()-1)
+        {
+            holder.viewSeparator.setVisibility(View.GONE);
+        }
+        else{
+            holder.viewSeparator.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -60,10 +67,12 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CityViewHo
 
     class CityViewHolder extends RecyclerView.ViewHolder {
         TextView cityTV;
+        View viewSeparator;
 
         public CityViewHolder(View itemView) {
             super(itemView);
             cityTV = itemView.findViewById(R.id.cityTV);
+            viewSeparator = itemView.findViewById(R.id.viewSeparator);
         }
     }
 
