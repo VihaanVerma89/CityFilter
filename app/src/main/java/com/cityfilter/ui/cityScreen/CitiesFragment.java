@@ -18,8 +18,12 @@ import android.widget.Toast;
 import com.cityfilter.R;
 import com.cityfilter.network.models.City;
 import com.cityfilter.utils.CityUtil;
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -56,6 +60,7 @@ public class CitiesFragment extends Fragment
         initSwipeRefreshLayout();
         initProgressBar();
         initRecyclerView();
+        initSearchView();
     }
 
     private ProgressBar mProgressBar;
@@ -80,7 +85,6 @@ public class CitiesFragment extends Fragment
         appCompatActivity.setSupportActionBar(toolbar);
         appCompatActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         final ActionBar ab = appCompatActivity.getSupportActionBar();
-//        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -108,6 +112,20 @@ public class CitiesFragment extends Fragment
         mSwipeRefreshLayout.setScrollUpChild(mRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.refreshCities());
+    }
+
+    private void initSearchView(){
+         android.support.v7.widget.SearchView searchView= getView().findViewById(R.id.searchView);
+        RxSearchView.queryTextChanges(searchView)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .map(charSequence -> charSequence.toString())
+                .filter(text -> !text.isEmpty())
+                .distinctUntilChanged()
+                .switchMap(text -> mPresenter.loadCities(text).toObservable())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cities ->{
+                    showCities(cities);
+                });
     }
 
     private CitiesContract.Presenter mPresenter;
@@ -148,4 +166,5 @@ public class CitiesFragment extends Fragment
         String toast = CityUtil.getCitySelectionText(mCities.get(position));
         Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
     }
+
 }

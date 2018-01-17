@@ -52,4 +52,9 @@ public class CitiesRemoteDataSource implements CitiesDataSource {
     public void deleteAllCities() {
 
     }
+
+    @Override
+    public Single<List<City>> getCities(String text) {
+        return null;
+    }
 }

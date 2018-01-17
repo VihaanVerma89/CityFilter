@@ -11,6 +11,7 @@ import com.cityfilter.utils.schedulers.BaseSchedulerProvider;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import retrofit2.HttpException;
@@ -78,6 +79,11 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     public void refreshCities() {
         mRepository.setCacheDirty();
         loadCities();
+    }
+
+    @Override
+    public Single<List<City>> loadCities(String text) {
+        return mRepository.getCities(text);
     }
 
     private void processCities(List<City> cities) {

@@ -14,4 +14,6 @@ public interface CitiesDataSource {
     Single<List<City>> getCities();
     void setCities(List<City> cities);
     void deleteAllCities();
+
+    Single<List<City>> getCities(String text);
 }

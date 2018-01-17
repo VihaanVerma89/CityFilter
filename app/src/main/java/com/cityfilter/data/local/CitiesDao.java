@@ -9,9 +9,7 @@ import com.cityfilter.network.models.City;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Single;
-import io.reactivex.internal.operators.flowable.FlowableTimeoutTimed;
 
 /**
  * Created by vihaanverma on 16/01/18.
@@ -25,6 +23,9 @@ public interface CitiesDao {
 
     @Query("SELECT * FROM " + Tables.CITIES)
     Single<List<City>> getCities();
+
+    @Query("SELECT * FROM " + Tables.CITIES + " where name like '%' || :city || '%'")
+    Single<List<City>> getCities(String city);
 
     @Query("DELETE FROM "+ Tables.CITIES)
     void deleteAllCities();

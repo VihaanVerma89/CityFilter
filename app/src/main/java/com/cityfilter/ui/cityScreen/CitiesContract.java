@@ -6,6 +6,8 @@ import com.cityfilter.ui.BaseView;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 /**
  * Created by vihaanverma on 16/01/18.
  */
@@ -28,5 +30,7 @@ public interface CitiesContract {
         void loadCities();
 
         void refreshCities();
+
+        Single<List<City>> loadCities(String text);
     }
 }

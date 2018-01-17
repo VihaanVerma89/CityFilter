@@ -77,6 +77,12 @@ public class CitiesRepository implements CitiesDataSource {
         mLocalDataSource.deleteAllCities();
     }
 
+    @Override
+    public Single<List<City>> getCities(String text) {
+        Single<List<City>> localCities = mLocalDataSource.getCities(text);
+        return localCities;
+    }
+
     private Single<List<City>> getAndSaveRemoteCity() {
         return mRemoteDataSource
                 .getCities()

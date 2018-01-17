@@ -50,4 +50,9 @@ public class CitiesLocalDataSource implements CitiesDataSource {
     public void deleteAllCities() {
        mCitiesDao.deleteAllCities();
     }
+
+    @Override
+    public Single<List<City>> getCities(String text) {
+        return mCitiesDao.getCities(text);
+    }
 }
